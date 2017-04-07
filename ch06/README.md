@@ -6,16 +6,15 @@ they are initialized by the **arguments** provided in the each function call.
 **Arguments**: Values supplied in a function call that are used to initialize the function's **parameters**.
 
 ##Exercise 6.2
-
 ```cpp
-(a) string f() {
+(a) string f() {  // return should be string, not int
           string s;
           // ...
           return s;
     }
-(b) void f2(int i) { /* ... */ }
-(c) int calc(int v1, int v2) { /* ... */ }
-(d) double square (double x) { return x * x; }
+(b) void f2(int i) { /* ... */ }  // function needs return type
+(c) int calc(int v1, int v2) { /* ... */ }  // parameter list cannot use same name twice
+(d) double square (double x) { return x * x; }  // function body needs braces
 ```
 
 ##Exercise 6.3
@@ -159,7 +158,7 @@ cause the `s` should not be changed by this function. but `occurs`'s result must
 
 >Why are these parameters references, but the char parameter `c` is not?
 
-casue `c` maybe a temp varable. such as `find_char(s, 'a', occurs)`
+cause `c` may be a temp varable, such as `find_char(s, 'a', occurs)`
 
 >What would happen if we made `s` a plain reference? What if we made `occurs` a reference to const?
 
@@ -231,7 +230,7 @@ The type of `elem` in the `for` loop is `const std::string&`.
 
 ## Exercise 6.29
 
-We should use `const reference` as the loop control variable. because the elements in an `initializer_list` are always const values, so we cannot change the value of an element in an `initializer_list`.
+Depends on the type of elements of `initializer_list`. When the type is [PODType](http://en.cppreference.com/w/cpp/concept/PODType), reference is unnecessary. Because `POD` is **cheap to copy**(such as `int`). Otherwise, Using reference(`const`) is the better choice.
 
 ## Exercise 6.30
 
@@ -317,18 +316,19 @@ Both two should put in a header. (a) is an inline function. (b) is the declarati
 ## [Exercise 6.44](ex6_44.cpp)
 ## Exercise 6.45
 
-For example, the function `arrPtr` in [Exercise 6.38](#exercise-638) and `make_plural` in [Exercise 6.42](#exercise-642) should be defined as `inline`. But the function `func` in [Exercise 6.4](#exercise-64) shouldn't. Cause it just being call once and too many codes in the function.
+For example, the function `arrPtr` in [Exercise 6.38](#exercise-638) and `make_plural` in [Exercise 6.42](#exercise-642) should be defined as `inline`. But the function `func` in [Exercise 6.4](#exercise-64) shouldn't. It is not that small and it's only being called once. Hence, it will probably not expand as inline.
 
 ## Exercise 6.46
 > Would it be possible to define `isShorter` as a `constexpr`? If so, do so. If not, explain why not.
 
 No.
 
-> A constexpr function is defined like any other function but must meet certain restrictions: The **return type** and **the type of each parameter** in a must be a literal type
+Because `std::string::size()` is not a `constexpr` function and `s1.size() == s2.size()` is not a constant expression.
 
-But `std::string`(parameter of `isShorter`) is not a literal type.
-
-more discusses: [#22](https://github.com/ReadingLab/Discussion-for-Cpp/issues/22)
+> **For a** non-template, non-defaulted **constexpr function** or a non-template, non-defaulted, non-inheriting
+constexpr constructor, **if no argument values exist such that an invocation of the function or constructor
+could be an evaluated subexpression of a core constant expression (5.19), the program is ill-formed;** no
+diagnostic required. (N3690 §7.1.5 [dcl.constexpr]/5)
 
 ## [Exercise 6.47](ex6_47.cpp)
 ## Exercise 6.48
