@@ -39,6 +39,4 @@ int main()
     std::vector<Bar> v;
     v.push_back(Bar());
     Bar b = fcn3(v.begin(), v.end());
-    ;
-    ;
 }
